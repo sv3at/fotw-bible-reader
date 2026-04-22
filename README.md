@@ -4,7 +4,7 @@ A small browser app that reads **only local JSON** under `public/bible-data/`. T
 
 ## Screenshot
 
-![Parallel reading view](docs/parallel-reading-screenshot.png)
+Parallel reading view
 
 ---
 
@@ -42,7 +42,7 @@ Vite serves `public/` at the **site root**, so data lives at `/bible-data/…`.
 
 **Option B — Python**
 
-Run the server from the **`bible-app` project root** (the folder that contains `index.html` and `public/`):
+Run the server from the `**bible-app` project root** (the folder that contains `index.html` and `public/`):
 
 ```bash
 cd path/to/bible-app
@@ -53,8 +53,8 @@ Then open: `http://127.0.0.1:8765/`
 
 With Python’s default handler, `public/` is **not** mounted at `/`; files appear under `/public/`. The app **detects** this by probing, in order:
 
-1. `/bible-data/` — matches **Vite** dev and `vite build` + `vite preview` (where `public/` is copied to the site root).  
-2. `/public/bible-data/` — matches `python -m http.server` with the **project root** as cwd.  
+1. `/bible-data/` — matches **Vite** dev and `vite build` + `vite preview` (where `public/` is copied to the site root).
+2. `/public/bible-data/` — matches `python -m http.server` with the **project root** as cwd.
 3. `public/bible-data/` **relative to the current page URL** — matches cases where you open e.g. `http://127.0.0.1:8765/bible-app/` because the server root is a **parent** folder (still run `build:bible` from inside `bible-app/` so `public/` exists there).
 
 If the page still fails:
@@ -67,20 +67,22 @@ If the page still fails:
 
 ## Project layout
 
-| Path | Purpose |
-|------|---------|
-| `index.html` | Shell + toolbar |
-| `PROJECT-HANDOFF.md` | Architecture snapshot, prompts, test overview (for new chats / teammates) |
-| `FORK-AND-CURSOR-SETUP.md` | How to fork, open in Cursor, and continue development |
-| `src/main.js` | UI, navigation, random verse, **local** `fetch` of manifest + data |
-| `src/verse-model.mjs` | Pure verse / Strong’s helpers (used by `main.js` and `npm test`) |
-| `tests/*.test.mjs` | Vitest regression suite (`npm test`) |
-| `src/style.css` | Layout and typography |
-| `public/bible-data/` | **Generated** — do not edit by hand; regenerate with `build:bible` |
-| `scripts/build-bible-data.mjs` | Download + normalize all translations + lexicon |
-| `scripts/kjv-strongs.mjs` | Parse Bolls KJV HTML into plain text + Strong’s segments |
-| `scripts/usfm-books.mjs` | 66-book USFM order and Zefania `bnumber` → USFM map |
-| `vite.config.js` | Dev server; `public/` is served at `/` under Vite |
+
+| Path                           | Purpose                                                                   |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| `index.html`                   | Shell + toolbar                                                           |
+| `PROJECT-HANDOFF.md`           | Architecture snapshot, prompts, test overview (for new chats / teammates) |
+| `FORK-AND-CURSOR-SETUP.md`     | How to fork, open in Cursor, and continue development                     |
+| `src/main.js`                  | UI, navigation, random verse, **local** `fetch` of manifest + data        |
+| `src/verse-model.mjs`          | Pure verse / Strong’s helpers (used by `main.js` and `npm test`)          |
+| `tests/*.test.mjs`             | Vitest regression suite (`npm test`)                                      |
+| `src/style.css`                | Layout and typography                                                     |
+| `public/bible-data/`           | **Generated** — do not edit by hand; regenerate with `build:bible`        |
+| `scripts/build-bible-data.mjs` | Download + normalize all translations + lexicon                           |
+| `scripts/kjv-strongs.mjs`      | Parse Bolls KJV HTML into plain text + Strong’s segments                  |
+| `scripts/usfm-books.mjs`       | 66-book USFM order and Zefania `bnumber` → USFM map                       |
+| `vite.config.js`               | Dev server; `public/` is served at `/` under Vite                         |
+
 
 ---
 
@@ -88,25 +90,27 @@ If the page still fails:
 
 Each row matches the **translation `id`** in `manifest.json` (same ids as the old bible-api.com list, where applicable).
 
-| `id` | Description (short) | Primary source |
-|------|---------------------|----------------|
-| `kjv` | King James Version **with Strong’s** per word (`{ p, s }` verse cells) | Bolls `KJV.json` (keeps `<S>n</S>` tags); gloss file below |
-| `web` | World English Bible | Bolls `WEB.json` |
-| `ylt` | Young's Literal Translation | Bolls `YLT.json` |
-| `asv` | American Standard Version 1901 | Bolls `ASV.json` |
-| `cuv` | Chinese Union (和合本) | Bolls `CUV.json` |
-| `dra` | Douay-Rheims (American edition) | Bolls `DRB.json` (mapped to id `dra`) |
-| `darby` | Darby Bible (English) | seven1m/open-bibles `eng-darby.zefania.xml` |
-| `bbe` | Bible in Basic English | thiagobodruk `en_bbe.json` |
-| `bkr` | Bible kralická (Czech) | seven1m/open-bibles `cze-bkr.zefania.xml` |
-| `clementine` | Latin Vulgate (Clementine) | Bolls `VULG.json` |
-| `almeida` | Portuguese Almeida family text | thiagobodruk `pt_aa.json` |
-| `rccv` | Romanian Cornilescu line | thiagodruk `ro_cornilescu.json` |
-| `synodal` | Russian Synodal | Bolls `SYNOD.json` (fixes prior API 404s for Russian) |
-| `cherokee` | Cherokee **New Testament only** | seven1m/open-bibles `chr-cherokee.usfx.xml` |
-| `webbe` | World English Bible, **British** edition | seven1m/open-bibles `eng-gb-webbe.usfx.xml` |
-| `oeb-us` | Label: Open English Bible (US) | **Same text file as `web`** (see [OEB note](#open-english-bible-oeb-us--oeb-cw) below) |
-| `oeb-cw` | Label: Open English Bible (Commonwealth) | **Same text file as `web`** (see note below) |
+
+| `id`         | Description (short)                                                    | Primary source                                                                         |
+| ------------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `kjv`        | King James Version **with Strong’s** per word (`{ p, s }` verse cells) | Bolls `KJV.json` (keeps `<S>n</S>` tags); gloss file below                             |
+| `web`        | World English Bible                                                    | Bolls `WEB.json`                                                                       |
+| `ylt`        | Young's Literal Translation                                            | Bolls `YLT.json`                                                                       |
+| `asv`        | American Standard Version 1901                                         | Bolls `ASV.json`                                                                       |
+| `cuv`        | Chinese Union (和合本)                                                    | Bolls `CUV.json`                                                                       |
+| `dra`        | Douay-Rheims (American edition)                                        | Bolls `DRB.json` (mapped to id `dra`)                                                  |
+| `darby`      | Darby Bible (English)                                                  | seven1m/open-bibles `eng-darby.zefania.xml`                                            |
+| `bbe`        | Bible in Basic English                                                 | thiagobodruk `en_bbe.json`                                                             |
+| `bkr`        | Bible kralická (Czech)                                                 | seven1m/open-bibles `cze-bkr.zefania.xml`                                              |
+| `clementine` | Latin Vulgate (Clementine)                                             | Bolls `VULG.json`                                                                      |
+| `almeida`    | Portuguese Almeida family text                                         | thiagobodruk `pt_aa.json`                                                              |
+| `rccv`       | Romanian Cornilescu line                                               | thiagodruk `ro_cornilescu.json`                                                        |
+| `synodal`    | Russian Synodal                                                        | Bolls `SYNOD.json` (fixes prior API 404s for Russian)                                  |
+| `cherokee`   | Cherokee **New Testament only**                                        | seven1m/open-bibles `chr-cherokee.usfx.xml`                                            |
+| `webbe`      | World English Bible, **British** edition                               | seven1m/open-bibles `eng-gb-webbe.usfx.xml`                                            |
+| `oeb-us`     | Label: Open English Bible (US)                                         | **Same text file as `web`** (see [OEB note](#open-english-bible-oeb-us--oeb-cw) below) |
+| `oeb-cw`     | Label: Open English Bible (Commonwealth)                               | **Same text file as `web`** (see note below)                                           |
+
 
 ### Open English Bible (`oeb-us` / `oeb-cw`)
 
@@ -146,13 +150,10 @@ The script fetches over the network from Bolls, GitHub raw (open-bibles, thiagob
 
 ## Why `python -m http.server` used to “not load”
 
-1. **Wrong folder** — The server must use the **`bible-app`** directory (where `index.html` lives) as the document root. If you start the server one level up, `/` will not serve this `index.html`.
-
-2. **`public/` vs Vite** — Vite maps `public/bible-data/` → URL `/bible-data/`. Python does **not**; the same files are at `/public/bible-data/`. **`src/main.js` now tries both** `/bible-data/` and `/public/bible-data/` until `manifest.json` loads successfully.
-
+1. **Wrong folder** — The server must use the `**bible-app`** directory (where `index.html` lives) as the document root. If you start the server one level up, `/` will not serve this `index.html`.
+2. `**public/` vs Vite** — Vite maps `public/bible-data/` → URL `/bible-data/`. Python does **not**; the same files are at `/public/bible-data/`. `**src/main.js` now tries both** `/bible-data/` and `/public/bible-data/` until `manifest.json` loads successfully.
 3. **Missing data** — Without `npm run build:bible`, `manifest.json` is absent and the app shows an error.
-
-4. **`file://`** — Opening `index.html` directly from disk often breaks `fetch()` for modules or local JSON. Always use a local HTTP server.
+4. `**file://`** — Opening `index.html` directly from disk often breaks `fetch()` for modules or local JSON. Always use a local HTTP server.
 
 ---
 
@@ -163,7 +164,7 @@ npm run build
 npm run preview
 ```
 
-`vite build` copies `public/` into `dist/`, so **`/bible-data/`** works in the preview and typical static hosts.
+`vite build` copies `public/` into `dist/`, so `**/bible-data/**` works in the preview and typical static hosts.
 
 ---
 
@@ -173,8 +174,8 @@ This app can run on GitHub Pages with root paths (`/bible-data/...`) when deploy
 
 Requirements:
 
-1. Repository name is exactly `<your-username>.github.io` (or org equivalent).  
-2. `public/bible-data/*` is committed (run `npm run build:bible` locally when source data changes).
+1. Repository name is exactly `<your-username>.github.io` (or org equivalent).
+2. `public/bible-data/`* is committed (run `npm run build:bible` locally when source data changes).
 
 Included workflow:
 
@@ -205,25 +206,24 @@ The app footer shows the **source** and **license** strings from `manifest.json`
 
 ## Troubleshooting
 
-| Symptom | Things to check |
-|---------|------------------|
-| Blank or “Could not load Bible data” | Run `npm run build:bible`; confirm `public/bible-data/manifest.json` exists. |
-| 404 on `manifest.json` in Network tab | Server cwd: must be `bible-app/` for Python; or use Vite. |
-| Console: MIME type / module errors | You are probably on `file://` — switch to `http://localhost:…`. |
-| Russian / other language empty | Pick that translation again after rebuild; confirm `t-synodal.json` (etc.) is non-zero size. |
+
+| Symptom                               | Things to check                                                                              |
+| ------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Blank or “Could not load Bible data”  | Run `npm run build:bible`; confirm `public/bible-data/manifest.json` exists.                 |
+| 404 on `manifest.json` in Network tab | Server cwd: must be `bible-app/` for Python; or use Vite.                                    |
+| Console: MIME type / module errors    | You are probably on `file://` — switch to `http://localhost:…`.                              |
+| Russian / other language empty        | Pick that translation again after rebuild; confirm `t-synodal.json` (etc.) is non-zero size. |
+
 
 ---
 
 ## Changing translations or adding your own
 
 1. Add or replace a `t-yourid.json` next to the others. Shape:
-
-   - `bookOrder`: array of USFM ids in display order (may be a subset, e.g. NT only).  
-   - `books`: map of USFM → `{ n: "Display name", ch: [ null, chapter1Verses, chapter2Verses, … ] }` where each `chapterN` is an array of verse strings (index `0` = verse 1).  
-   - Optional `_meta`: `{ name, language, license, source }`.
-
+  - `bookOrder`: array of USFM ids in display order (may be a subset, e.g. NT only).  
+  - `books`: map of USFM → `{ n: "Display name", ch: [ null, chapter1Verses, chapter2Verses, … ] }` where each `chapterN` is an array of verse strings (index `0` = verse 1).  
+  - Optional `_meta`: `{ name, language, license, source }`.
 2. Add an entry to `manifest.json` with `id`, `name`, `language`, `license`, `source`, and `dataFile`.
-
 3. Easiest path to regenerate everything from upstream: edit `scripts/build-bible-data.mjs` and run `npm run build:bible` again.
 
 For a copy/paste checklist and examples, see `CUSTOM-TRANSLATIONS.md`.

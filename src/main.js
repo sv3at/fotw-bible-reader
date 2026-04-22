@@ -230,7 +230,7 @@ function fillTranslationSelects(sorted) {
     const one = document.createElement("option");
     one.value = t.id;
     one.textContent = `${t.name} (${t.language || "—"})`;
-    if (t.id === "kjv") one.selected = true;
+    if (t.id === "synodal") one.selected = true;
     els.translation.appendChild(one);
 
     const two = document.createElement("option");
@@ -619,7 +619,7 @@ async function init() {
     };
     const sorted = [...manifest.translations].sort(enFirst);
     fillTranslationSelects(sorted);
-    const tr = els.translation.value || "kjv";
+    const tr = els.translation.value || "synodal";
     const m = sorted.find((x) => x.id === tr) || sorted[0];
     els.translation.value = m.id;
     const fallbackCompare = sorted.find((x) => x.id !== m.id) || m;
