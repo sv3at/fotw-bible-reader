@@ -167,6 +167,31 @@ npm run preview
 
 ---
 
+## GitHub Pages (user/org root site)
+
+This app can run on GitHub Pages with root paths (`/bible-data/...`) when deployed as a **user/org root site**.
+
+Requirements:
+
+1. Repository name is exactly `<your-username>.github.io` (or org equivalent).  
+2. `public/bible-data/*` is committed (run `npm run build:bible` locally when source data changes).
+
+Included workflow:
+
+- `.github/workflows/deploy-pages.yml` deploys on push to `main` (or manual run).
+
+One-time GitHub setup:
+
+1. Open **Settings → Pages**.
+2. Under **Build and deployment**, set **Source = GitHub Actions**.
+3. Push to `main` and wait for the workflow to publish.
+
+After deployment, site URL is:
+
+- `https://<your-username>.github.io/`
+
+---
+
 ## Licenses and attribution
 
 - **Bolls** bulk JSON: see [Bolls API / project docs](https://github.com/Bolls-Bible/bain); use their published static URLs only as intended (full-translation downloads for local use).
