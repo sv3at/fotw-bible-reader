@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "about": "Derived from bolls.life (bulk JSON), thiagobodruk/bible, seven1m/open-bibles, and openscriptures/strongs (lexicon). Review licenses in each translation entry.",
+  "translations": [
+    {
+      "id": "cherokee",
+      "name": "Cherokee New Testament",
+      "language": "Cherokee (NT; subset of canon)",
+      "license": "public domain (NT only in source file)",
+      "dataFile": "t-cherokee.json",
+      "source": "seven1m/open-bibles: chr-cherokee.usfx.xml"
+    },
+    {
+      "id": "cuv",
+      "name": "Chinese Union Version 和合本",
+      "language": "Chinese (Traditional/Union, Bolls CUV)",
+      "license": "Public Domain",
+      "dataFile": "t-cuv.json",
+      "source": "Bolls: CUV"
+    },
+    {
+      "id": "bkr",
+      "name": "Bible Kralická 1613 (Czech, Zefania)",
+      "language": "Czech",
+      "license": "public domain",
+      "dataFile": "t-bkr.json",
+      "source": "seven1m/open-bibles: cze-bkr.zefania.xml"
+    },
+    {
+      "id": "dra",
+      "name": "Douay-Rheims Bible 1899 American",
+      "language": "English (DRB/DRA)",
+      "license": "Public Domain",
+      "dataFile": "t-dra.json",
+      "source": "Bolls: DRB"
+    },
+    {
+      "id": "oeb-cw",
+      "name": "Open English Bible, Commonwealth (UK) [WEB content — see note]",
+      "language": "English (UK, Commonwealth placeholder)",
+      "license": "Public Domain (as WEB; see source)",
+      "dataFile": "t-oeb-cw.json",
+      "source": "The OEB (Open English) single OSIS in seven1m/open-bibles is not a full 66-book one-file import. This bundle reuses the same text as the World English Bible (Bolls WEB) so navigation stays consistent; replace t-oeb-*.json if you have a full OEB export."
+    },
+    {
+      "id": "webbe",
+      "name": "World English Bible, British Ed. (WEBBE)",
+      "language": "English (UK)",
+      "license": "Public Domain",
+      "dataFile": "t-webbe.json",
+      "source": "seven1m/open-bibles: eng-gb-webbe.usfx.xml"
+    },
+    {
+      "id": "oeb-us",
+      "name": "Open English Bible (US) [WEB content — see note]",
+      "language": "English (US)",
+      "license": "Public Domain (as WEB; see source)",
+      "dataFile": "t-oeb-us.json",
+      "source": "The OEB (Open English) single OSIS in seven1m/open-bibles is not a full 66-book one-file import. This bundle reuses the same text as the World English Bible (Bolls WEB) so navigation stays consistent; replace t-oeb-*.json if you have a full OEB export."
+    },
+    {
+      "id": "asv",
+      "name": "American Standard Version 1901",
+      "language": "English",
+      "license": "Public Domain",
+      "dataFile": "t-asv.json",
+      "source": "Bolls: ASV"
+    },
+    {
+      "id": "bbe",
+      "name": "Bible in Basic English",
+      "language": "English",
+      "license": "CC BY-NC (text); verify use in your app",
+      "dataFile": "t-bbe.json",
+      "source": "thiagodruk: en_bbe.json"
+    },
+    {
+      "id": "darby",
+      "name": "Darby Bible (English, Zefania Unbound 2009)",
+      "language": "English",
+      "license": "see Zefania metadata",
+      "dataFile": "t-darby.json",
+      "source": "seven1m/open-bibles: eng-darby.zefania.xml"
+    },
+    {
+      "id": "kjv",
+      "name": "King James Version (Strong's)",
+      "language": "English",
+      "license": "Public Domain (KJV); Strong's from Bolls markup",
+      "dataFile": "t-kjv.json",
+      "source": "Bolls static KJV with <S>number</S> Strong's tags; lexicon: openscriptures/strongs",
+      "features": [
+        "strongs"
+      ]
+    },
+    {
+      "id": "web",
+      "name": "World English Bible",
+      "language": "English",
+      "license": "Public Domain",
+      "dataFile": "t-web.json",
+      "source": "Bolls: WEB"
+    },
+    {
+      "id": "ylt",
+      "name": "Young's Literal Translation (1898)",
+      "language": "English",
+      "license": "Public Domain",
+      "dataFile": "t-ylt.json",
+      "source": "Bolls: YLT"
+    },
+    {
+      "id": "clementine",
+      "name": "Biblia Sacra Vulgatam Clementinam",
+      "language": "Latin",
+      "license": "Public Domain",
+      "dataFile": "t-clementine.json",
+      "source": "Bolls: VULG"
+    },
+    {
+      "id": "almeida",
+      "name": "João Ferreira de Almeida (revisada)",
+      "language": "Portuguese",
+      "license": "varies; verify",
+      "dataFile": "t-almeida.json",
+      "source": "thiagodruk: pt_aa.json"
+    },
+    {
+      "id": "rccv",
+      "name": "Protestant Romanian: Cornilescu (Dumitru) — thiagodruk 'ro_cornilescu'",
+      "language": "Romanian",
+      "license": "verify",
+      "dataFile": "t-rccv.json",
+      "source": "thiagodruk: ro_cornilescu.json"
+    },
+    {
+      "id": "synodal",
+      "name": "Russian Synodal 1876 (SYNOD)",
+      "language": "Russian",
+      "license": "Public Domain",
+      "dataFile": "t-synodal.json",
+      "source": "Bolls: SYNOD"
+    }
+  ],
+  "lexiconFile": "lexicon-slim.json"
+}

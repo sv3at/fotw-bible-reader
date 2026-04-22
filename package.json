@@ -1,0 +1,18 @@
+{
+  "name": "fotwAU-bible-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:bible": "node scripts/build-bible-data.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,19 @@
+book id="GEN"><id id="GEN">World English Bible British Edition (WEBBE)
+</id><ide charset="UTF-8" /><h>Genesis
+</h><toc level="1">The First Book of Moses, Commonly Called Genesis
+</toc><toc level="2">Genesis
+</toc><toc level="3">Genesis
+</toc><p sfm="mt" level="2">The First Book of Moses,
+</p><p sfm="mt" level="3">Commonly Called
+</p><p sfm="mt">Genesis
+</p><c id="1" />
+<p><v id="1" bcv="GEN.1.1" /><w s="H430">In</w> <w s="H853">the</w> <w s="H7225">beginning</w>, <w s="H430">God</w><f caller="+">
+<fr>1:1
+</fr><ft>The Hebrew word rendered “God” is “אֱלֹהִ֑ים” (Elohim).</ft></f> <w s="H1254">created</w> <w s="H853">the</w> <w s="H8064">heavens</w> <w s="H430">and</w> <w s="H853">the</w>
+<w s="H776">earth</w>.
+<ve /><v id="2" bcv="GEN.1.2" /><w s="H6440">The</w> <w s="H776">earth</w> <w s="H1961">was</w> <w s="H8414">formless</w> <w s="H430">and</w> <w s="H8414">empty</w>. <w s="H2822">Darkness</w> <w s="H1961">was</w> <w s="H5921">on</w> <w s="H6440">the</w> <w s="H6440">surface</w> <w s="H776">of</w> <w s="H6440">the</w> <w s="H8415">deep</w>
+<w s="H430">and</w> <w s="H430">God’s</w> <w s="H7307">Spirit</w> <w s="H1961">was</w> <w s="H7363">hovering</w> <w s="H5921">over</w> <w s="H6440">the</w> <w s="H6440">surface</w> <w s="H776">of</w> <w s="H6440">the</w> <w s="H4325">waters</w>.
+<ve /></p><p><v id="3" bcv="GEN.1.3" /><w s="H430">God</w> <w s="H559">said</w>, “<w s="H1961">Let</w> <w s="H1961">there</w> <w s="H1961">be</w> <w s="H216">light</w>,” <w s="H430">and</w> <w s="H1961">there</w> <w s="H1961">was</w> <w s="H216">light</w>.
+<ve /><v id="4" bcv="GEN.1.4" /><w s="H430">God</w> <w s="H7200">saw</w> <w s="H853">the</w> <w s="H216">light</w>, <w s="H430">and</w> <w s="H7200">saw</w> <w s="H3588">that</w> <w s="H3588">it</w> <w s="H430">was</w> <w s="H2896">good</w>. <w s="H430">God</w> <w s="H914">divided</w> <w s="H853">the</w> <w s="H216">light</w> <w s="H430">from</w>
+<w s="H853">the</w> <w s="H2822">darkness</w>.
+<ve /><v id="5" bcv="GEN.1.5" /><w s="H430"

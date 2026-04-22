@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Bible Reader</title>
+    <script type="module" crossorigin src="/assets/index-o8I_3VQ5.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BM1El9Q0.css">
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="header">
+        <h1 class="title">Simple Bible Reader</h1>
+        <p class="subtitle">
+          Entirely offline. Rebuild with <code>npm run build:bible</code>. Full setup, Python vs Vite paths, and licenses:
+          <a href="./README.md">README.md</a>
+        </p>
+        <form class="toolbar" id="toolbar" autocomplete="off">
+          <label class="field field-book">
+            <span>Book</span>
+            <select id="book" name="book" disabled></select>
+          </label>
+          <label class="field">
+            <span>Chapter</span>
+            <select id="chapter" name="chapter" disabled></select>
+          </label>
+          <label class="field">
+            <span>Translation</span>
+            <select id="translation" name="translation"></select>
+          </label>
+          <label class="field">
+            <span>Parallel Reading</span>
+            <label class="toggle">
+              <input type="checkbox" id="compare-toggle" name="compare-toggle" />
+              <span>Enable side by side</span>
+            </label>
+          </label>
+          <label class="field" id="compare-field" hidden>
+            <span>Second Translation</span>
+            <select id="translation-compare" name="translation-compare"></select>
+          </label>
+          <div class="nav-btns">
+            <button type="button" id="prev" class="btn" disabled>← Previous</button>
+            <button type="button" id="next" class="btn" disabled>Next →</button>
+            <button type="button" id="random" class="btn btn-secondary" title="Random verse (NT)">
+              Random
+            </button>
+          </div>
+        </form>
+      </header>
+      <main>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+        <article class="passage" id="passage" hidden>
+          <section class="passage-col">
+            <h2 class="ref" id="ref"></h2>
+            <ol class="verses" id="verses"></ol>
+          </section>
+          <section class="passage-col passage-col-compare" id="passage-compare" hidden>
+            <h2 class="ref" id="ref-compare"></h2>
+            <ol class="verses" id="verses-compare"></ol>
+          </section>
+        </article>
+        <p class="footnote" id="footnote"></p>
+      </main>
+    </div>
+    <dialog id="lex-dialog" class="lex-dialog" aria-labelledby="lex-dialog-title">
+      <div class="lex-dialog-inner">
+        <h3 id="lex-dialog-title" class="lex-dialog-title">Strong’s</h3>
+        <p id="lex-dialog-lemma" class="lex-dialog-lemma"></p>
+        <p id="lex-dialog-def" class="lex-dialog-def"></p>
+        <p class="lex-dialog-actions">
+          <a id="lex-dialog-step" class="lex-dialog-link" href="#" target="_blank" rel="noopener noreferrer"
+            >Open in STEP Bible</a
+          >
+          <button type="button" id="lex-dialog-close" class="btn btn-secondary">Close</button>
+        </p>
+        <p class="lex-dialog-attrib" id="lex-dialog-attrib"></p>
+      </div>
+    </dialog>
+  </body>
+</html>
