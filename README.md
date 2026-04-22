@@ -2,6 +2,10 @@
 
 A small browser app that reads **only local JSON** under `public/bible-data/`. There is **no** runtime call to bible-api.com or other Bible APIs.
 
+## Screenshot
+
+![Parallel reading view](docs/parallel-reading-screenshot.png)
+
 ---
 
 ## Quick start
@@ -67,6 +71,7 @@ If the page still fails:
 |------|---------|
 | `index.html` | Shell + toolbar |
 | `PROJECT-HANDOFF.md` | Architecture snapshot, prompts, test overview (for new chats / teammates) |
+| `FORK-AND-CURSOR-SETUP.md` | How to fork, open in Cursor, and continue development |
 | `src/main.js` | UI, navigation, random verse, **local** `fetch` of manifest + data |
 | `src/verse-model.mjs` | Pure verse / Strong’s helpers (used by `main.js` and `npm test`) |
 | `tests/*.test.mjs` | Vitest regression suite (`npm test`) |
@@ -195,3 +200,7 @@ The app footer shows the **source** and **license** strings from `manifest.json`
 2. Add an entry to `manifest.json` with `id`, `name`, `language`, `license`, `source`, and `dataFile`.
 
 3. Easiest path to regenerate everything from upstream: edit `scripts/build-bible-data.mjs` and run `npm run build:bible` again.
+
+For a copy/paste checklist and examples, see `CUSTOM-TRANSLATIONS.md`.
+
+For onboarding from a fork in Cursor, see `FORK-AND-CURSOR-SETUP.md`.

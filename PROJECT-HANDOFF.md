@@ -1,32 +1,36 @@
 # Bible app — handoff snapshot and continuation guide
 
-This file captures **what exists today**, **where things live**, and **how to keep working** in Cursor (or similar) without losing context. It is meant to be copied into a new chat or shared with a teammate.
+This file captures what exists now, where key logic lives, and how to continue safely.
 
 ---
 
-## 1. What this project is
+## 1. Current product state
 
-- **Offline-first Bible reader** in the browser: `index.html` + `src/main.js` + `src/style.css`.
-- **Data** lives under `public/bible-data/` (generated). The app probes **`/bible-data/`** (Vite) and **`/public/bible-data/`** (Python `http.server` from repo root) plus a URL-relative `public/bible-data/` fallback.
-- **Build pipeline** (`npm run build:bible`) downloads upstream JSON/XML, normalizes to a common `{ books, bookOrder, _meta?, _strongs? }` shape, and writes `manifest.json` + `t-*.json` + **`lexicon-slim.json`** (Strong’s glosses).
-- **KJV** is special: verses are **`{ p, s }`** (`p` = plain text, `s` = token segments with `H…` / `G…` Strong’s ids from Bolls `<S>n</S>` markup). Other translations use **plain strings** per verse.
-- **UI**: Strong’s chips link to STEP Bible; click opens a **dialog** with a short local gloss from `lexicon-slim.json` (Open Scriptures, CC BY-SA).
+- Offline-first Bible reader with local data under `public/bible-data/`.
+- KJV includes per-word Strong's (`{ p, s }` verse cells); other translations are plain string verses.
+- Strong's chips open local gloss dialog and support external STEP links.
+- Parallel reading mode supports two translations on one page.
+- Psalm chapter mapping in parallel mode handles Synodal vs MT/English numbering differences.
+- Verse selection mirrors across both columns; word selection is intentionally single-side only.
 
 ---
 
-## 2. File map (high signal)
+## 2. Key files
 
 | Path | Role |
 |------|------|
-| `src/main.js` | Boot, `fetch` manifest + translation JSON, navigation, KJV rendering, lexicon dialog |
-| `src/verse-model.mjs` | **Pure** helpers: `versePlain`, `isStrongsVerseCell`, `stepStrongUrl`, `lookupLexEntry`, `cleanVerseText` — shared with tests |
-| `scripts/build-bible-data.mjs` | Download + normalize all translations + lexicon |
-| `scripts/kjv-strongs.mjs` | Parse Bolls KJV HTML → plain + segments |
-| `scripts/strong-lexicon-vm.mjs` | Run Open Scriptures dictionary **`.js`** in `node:vm` → object |
-| `scripts/usfm-books.mjs` | `USFM_LIST`, `BNUMBER_TO_USFM`, `USFM_BY_ID` |
-| `public/bible-data/` | Generated output — do not hand-edit |
-| `tests/*.test.mjs` | Vitest unit + optional integration checks |
-| `README.md` | User-facing setup, licenses, troubleshooting |
+| `index.html` | App shell, toolbar controls, parallel/compare UI containers |
+| `src/main.js` | App state, data loading, rendering, parallel mode, selections, Psalm mapping |
+| `src/style.css` | Responsive layout, parallel mode styling, highlights |
+| `src/verse-model.mjs` | Pure helpers for verse/Strong's behavior used by app and tests |
+| `scripts/build-bible-data.mjs` | Build pipeline for translations + lexicon |
+| `scripts/kjv-strongs.mjs` | Parse Bolls `<S>…</S>` Strong's markup |
+| `scripts/strong-lexicon-vm.mjs` | VM loader for Open Scriptures dictionary scripts |
+| `public/bible-data/` | Generated runtime bundle (`manifest.json`, `t-*.json`, `lexicon-slim.json`) |
+| `tests/*.test.mjs` | Vitest suite |
+| `README.md` | User-facing docs |
+| `CUSTOM-TRANSLATIONS.md` | How to add custom translation JSON files |
+| `FORK-AND-CURSOR-SETUP.md` | How to fork/import into Cursor and continue development |
 
 ---
 
@@ -34,77 +38,72 @@ This file captures **what exists today**, **where things live**, and **how to ke
 
 ```bash
 npm install
-npm test                 # Vitest (node); safe without built data except skipped describe
-npm run build:bible      # Regenerate public/bible-data (network)
-npm run dev              # Vite dev server
-npm run build && npm run preview   # Production static build
+npm test
+npm run build:bible
+npm run dev
+npm run build && npm run preview
 ```
 
 ---
 
-## 4. Design constraints worth preserving
+## 4. Important behavior contracts
 
-1. **No runtime Bible API** — everything from local JSON (+ optional external STEP link in new tab / dialog).
-2. **KJV verse cells are objects** — any code that assumes `verse` is always a string will break random verse, search, or copy. Use **`versePlain()`** for display / emptiness checks; use **`isStrongsVerseCell()`** before treating `.s` as an array.
-3. **Python vs Vite paths** — `resolveDataBase()` must keep trying multiple bases; regressions show up as “Could not load Bible data”.
-4. **Duplicate HTTP listeners** on one port can cause **`ERR_EMPTY_RESPONSE`**; document in README, not magic-fixed in code.
-5. **Lexicon** — `lookupLexEntry` supports **zero-padded Hebrew** keys (`H0001`) vs short ids (`H1`) from segmentation.
-
----
-
-## 5. Best prompts to continue (copy/paste templates)
-
-Use these in a **new agent chat** after `@`-mentioning `PROJECT-HANDOFF.md` and `README.md`.
-
-### Bugfix (symptom-first)
-
-> In `bible-app/`, [describe symptom + URL if any]. Relevant files: `PROJECT-HANDOFF.md`, `src/main.js`, `scripts/…`. Run `npm test` and fix until green; keep the fix minimal and add or extend a test in `tests/` if the bug could regress.
-
-### Feature (behavior contract)
-
-> Add [feature] to the offline Bible app. Constraints: stay local JSON, no new runtime third-party Bible APIs, keep KJV `{p,s}` shape compatible. Touch only needed files; extend `tests/` for new logic. Run `npm test` and summarize behavior for KJV vs non-KJV.
-
-### Data / Strong’s pipeline
-
-> Change `scripts/build-bible-data.mjs` / `kjv-strongs.mjs` so that [goal]. After edits, run `npm run build:bible` locally (I will run network) and ensure `tests/manifest-shape.test.mjs` expectations still match. Document license/source changes in `README.md`.
-
-### UI / a11y
-
-> Update `index.html` + `src/style.css` + `src/main.js` for [UI goal]. Preserve existing toolbar flow and data probing. Add a short test only if you extract new pure logic into `src/verse-model.mjs` (or another testable module).
-
-### Refactor (discipline)
-
-> Refactor [area] for clarity without changing behavior. Run `npm test` before and after; no unrelated formatting churn.
+1. No runtime Bible API calls; content is local JSON.
+2. KJV verse cells may be object-form (`{ p, s }`), so do not assume verse is always a string.
+3. `resolveDataBase()` fallback sequence must keep supporting Vite and Python server paths.
+4. Parallel mode:
+   - disabled: single full-width column, compare selector disabled
+   - enabled: side-by-side columns (with horizontal overflow on narrow screens)
+5. Selection model:
+   - verse highlight can mirror across both columns
+   - word highlight is local to the clicked side only
+   - word clicks must not trigger verse auto-scroll jump
+6. Psalm mapping:
+   - only applied in parallel mode for `PSA`
+   - Synodal side is remapped against MT/English chapter numbers
 
 ---
 
-## 6. Test suite overview (`npm test`)
+## 5. Test coverage
 
 | File | What it guards |
 |------|----------------|
-| `tests/kjv-strongs.test.mjs` | Bolls HTML → plain text + OT/NT `H`/`G` segments + orphan pairing |
-| `tests/verse-model.test.mjs` | Verse cell shape, STEP URL, lexicon key fallback |
-| `tests/strong-lexicon-vm.test.mjs` | VM loader for dictionary scripts (build-time dependency) |
-| `tests/usfm-books.test.mjs` | 66-book map sanity (`GEN`/`MAT` indices) |
-| `tests/manifest-shape.test.mjs` | Static manifest schema + **optional** checks on `public/bible-data` when present (`describe.skipIf`) |
+| `tests/kjv-strongs.test.mjs` | Strong's parsing and OT/NT id formatting |
+| `tests/verse-model.test.mjs` | Core helper behavior |
+| `tests/strong-lexicon-vm.test.mjs` | Dictionary VM loader |
+| `tests/usfm-books.test.mjs` | Canon mapping sanity |
+| `tests/manifest-shape.test.mjs` | Manifest schema + optional generated bundle checks |
 
-**CI tip:** Tests pass **without** `public/bible-data`; the generated-bundle describe is skipped until someone runs `npm run build:bible`.
-
----
-
-## 7. Known follow-ups (optional backlog)
-
-- Parser edge cases: consecutive `<S>` with empty text between (if Bolls ever emits them).
-- E2E: Playwright against `vite preview` (heavier; not in repo yet).
-- Strong’s on translations other than KJV only if a tagged source is added to the build.
+CI note: tests pass without generated data; bundle-dependent checks are skipped if `public/bible-data` is absent.
 
 ---
 
-## 8. License / attribution reminders
+## 6. Suggested prompts for next chats
 
-- KJV text: public domain; Strong’s **tags** from Bolls export.
-- `lexicon-slim.json`: derived from **Open Scriptures** Strong’s dictionaries (**CC BY-SA**) — keep attribution in UI/README when shipping.
+- **Bugfix prompt**
+  - "Fix [symptom] in `src/main.js` and `src/style.css`; keep behavior contracts from `PROJECT-HANDOFF.md`; run `npm test`."
+- **Feature prompt**
+  - "Add [feature] without breaking KJV `{p,s}` and offline-only data model; update tests."
+- **Data prompt**
+  - "Update `scripts/build-bible-data.mjs` for [source change], run `npm run build:bible`, and update docs."
+- **UI prompt**
+  - "Adjust toolbar/passage layout in `index.html` + `src/style.css` and keep parallel mode behavior."
 
 ---
 
-*Last aligned with repo layout: handoff doc + Vitest + `verse-model.mjs` + `strong-lexicon-vm.mjs` extraction.*
+## 7. Known backlog
+
+- Add E2E tests (Playwright) for parallel mode + Psalm mapping + selection behavior.
+- Consider optional "clear highlights" control.
+- Consider schema validation script for custom translation JSON before manifest registration.
+
+---
+
+## 8. Attribution reminders
+
+- KJV text is public domain; Strong's tagging from Bolls export.
+- `lexicon-slim.json` derives from Open Scriptures Strong's dictionaries (CC BY-SA).
+
+---
+
+Last aligned with: parallel mode, Synodal Psalm mapping, side-scoped word selection, mobile parallel layout, toolbar reorder, and README screenshot/docs updates.
