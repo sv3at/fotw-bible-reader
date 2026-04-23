@@ -66,7 +66,7 @@ const els = {
   lexDialog: $("lex-dialog"),
   lexTitle: $("lex-dialog-title"),
   lexLemma: $("lex-dialog-lemma"),
-  lexDef: $("lex-dialog-def"),
+  lexBody: $("lex-dialog-body"),
   lexStep: $("lex-dialog-step"),
   lexClose: $("lex-dialog-close"),
   lexAttrib: $("lex-dialog-attrib"),
@@ -103,7 +103,7 @@ const NT_IDS = new Set(
 
 let manifest = null;
 let dataCache = new Map();
-/** @type {Record<string, {l?: string, t?: string, d?: string}> | undefined} */
+/** @type {Record<string, {l?: string, t?: string, p?: string, d?: string, sd?: string, kd?: string, dv?: string}> | undefined} */
 let lexiconData;
 let currentData = null;
 let currentDataFile = null;
@@ -133,20 +133,78 @@ async function ensureLexicon() {
   return lexiconData;
 }
 
+function lexiconRowHasText(row) {
+  if (!row) return false;
+  return !!(row.l || row.t || row.p || row.d || row.sd || row.kd || row.dv);
+}
+
+/**
+ * @param {HTMLElement} container
+ * @param {{ l?: string, t?: string, p?: string, d?: string, sd?: string, kd?: string, dv?: string }} row
+ * @param {ReturnType<typeof getUiBundle>} u
+ */
+function renderLexiconBody(container, row, u) {
+  container.replaceChildren();
+  const sections = /** @type {Array<[string, string]>} */ ([]);
+  if (row.dv) sections.push([u.lexDerivation, row.dv]);
+  if (row.sd) sections.push([u.lexStrongsDef, row.sd]);
+  if (row.kd) sections.push([u.lexKjvDef, row.kd]);
+  if (sections.length) {
+    for (const [title, body] of sections) {
+      const sec = document.createElement("section");
+      sec.className = "lex-section";
+      const h = document.createElement("h4");
+      h.className = "lex-section-title";
+      h.textContent = title;
+      const p = document.createElement("p");
+      p.className = "lex-section-body";
+      p.textContent = body;
+      sec.appendChild(h);
+      sec.appendChild(p);
+      container.appendChild(sec);
+    }
+    return;
+  }
+  if (row.d) {
+    const p = document.createElement("p");
+    p.className = "lex-dialog-def";
+    p.textContent = row.d;
+    container.appendChild(p);
+    return;
+  }
+  const p = document.createElement("p");
+  p.className = "lex-section-body";
+  p.textContent = "—";
+  container.appendChild(p);
+}
+
+/**
+ * @param {HTMLElement} container
+ * @param {ReturnType<typeof getUiBundle>} u
+ */
+function renderLexiconBodyFallback(container, u) {
+  container.replaceChildren();
+  const p = document.createElement("p");
+  p.className = "lex-section-body";
+  p.textContent = u.lexUseStep;
+  container.appendChild(p);
+}
+
 async function showLexiconFor(strongId) {
   const u = getUiBundle(currentMeta);
   const lex = await ensureLexicon();
   const row = lookupLexEntry(lex, strongId);
   els.lexTitle.textContent = u.lexStrongsTitle(strongId);
-  if (row && (row.l || row.t || row.d)) {
+  if (row && lexiconRowHasText(row)) {
     const bits = [];
     if (row.l) bits.push(row.l);
     if (row.t) bits.push(`(${row.t})`);
+    if (row.p) bits.push(`· ${row.p}`);
     els.lexLemma.textContent = bits.join(" ") || "—";
-    els.lexDef.textContent = row.d || "—";
+    renderLexiconBody(els.lexBody, row, u);
   } else {
     els.lexLemma.textContent = u.lexNoGloss;
-    els.lexDef.textContent = u.lexUseStep;
+    renderLexiconBodyFallback(els.lexBody, u);
   }
   els.lexStep.href = stepStrongUrl(strongId);
   els.lexAttrib.textContent = u.lexAttrib;
@@ -444,17 +502,24 @@ function renderVerseList(data, meta, refEl, listEl, chapterNum, side) {
       pendingVerseScroll = true;
       void loadPassage();
     });
-    const n = document.createElement("button");
-    n.type = "button";
+    const n = document.createElement("span");
     n.className = "vnum vnum-btn";
+    n.setAttribute("role", "button");
+    n.tabIndex = 0;
     n.textContent = String(vnum);
     const copyLabel = `${bname} ${chapterNum}:${vnum} — ${tname}`;
     n.title = `Copy ${copyLabel}`;
     n.setAttribute("aria-label", `Copy reference ${copyLabel}`);
-    n.addEventListener("click", async (ev) => {
+    const copyReference = async (ev) => {
       ev.stopPropagation();
       const ok = await copyText(copyLabel);
       setStatus(ok ? `Copied: ${copyLabel}` : "Copy failed. Please copy manually.", !ok);
+    };
+    n.addEventListener("click", copyReference);
+    n.addEventListener("keydown", async (ev) => {
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      ev.preventDefault();
+      await copyReference(ev);
     });
     const tspan = document.createElement("span");
     tspan.className = "vtext";
