@@ -190,6 +190,37 @@ function setStatus(msg, isError = false) {
   els.status.classList.toggle("error", isError);
 }
 
+/**
+ * @param {string} text
+ * @returns {Promise<boolean>}
+ */
+async function copyText(text) {
+  const value = String(text || "").trim();
+  if (!value) return false;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {
+    /* fallback below */
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = value;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 function setLoading(loading) {
   document.body.classList.toggle("loading", loading);
 }
@@ -377,6 +408,7 @@ function mapChapterForParallel(primaryMetaIn, compareMetaIn, bookId, chapterNum)
 function renderVerseList(data, meta, refEl, listEl, chapterNum, side) {
   const b = data.books[currentBookId];
   const tname = (meta && meta.name) || (data._meta && data._meta.name) || "—";
+  const bname = (b && b.n) || currentBookId;
   if (!b || !b.ch[chapterNum]) {
     refEl.textContent = `${currentBookId} ${chapterNum} — ${tname}`;
     listEl.replaceChildren();
@@ -399,14 +431,31 @@ function renderVerseList(data, meta, refEl, listEl, chapterNum, side) {
     li.className = "verse";
     if (highlightVerse != null && vnum === highlightVerse) li.classList.add("verse-highlight");
     li.dataset.verse = String(vnum);
+    li.tabIndex = 0;
     li.addEventListener("click", () => {
       highlightVerse = vnum;
       pendingVerseScroll = true;
       void loadPassage();
     });
-    const n = document.createElement("span");
-    n.className = "vnum";
+    li.addEventListener("keydown", (ev) => {
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      ev.preventDefault();
+      highlightVerse = vnum;
+      pendingVerseScroll = true;
+      void loadPassage();
+    });
+    const n = document.createElement("button");
+    n.type = "button";
+    n.className = "vnum vnum-btn";
     n.textContent = String(vnum);
+    const copyLabel = `${bname} ${chapterNum}:${vnum} — ${tname}`;
+    n.title = `Copy ${copyLabel}`;
+    n.setAttribute("aria-label", `Copy reference ${copyLabel}`);
+    n.addEventListener("click", async (ev) => {
+      ev.stopPropagation();
+      const ok = await copyText(copyLabel);
+      setStatus(ok ? `Copied: ${copyLabel}` : "Copy failed. Please copy manually.", !ok);
+    });
     const tspan = document.createElement("span");
     tspan.className = "vtext";
     const tokenCursor = { i: 0 };

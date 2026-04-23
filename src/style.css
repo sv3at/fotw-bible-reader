@@ -53,6 +53,23 @@ body {
   line-height: 1.45;
 }
 
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 9999;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+}
+
 .app {
   max-width: 76rem;
   margin: 0 auto;
@@ -399,6 +416,13 @@ body.loading {
   border-left: 2px solid transparent;
   padding-left: 0.35rem;
   margin-left: 0.15rem;
+  cursor: pointer;
+}
+
+.verse:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .verse-highlight {
@@ -423,7 +447,23 @@ body.loading {
   font-weight: 600;
   vertical-align: top;
   margin-right: 0.15em;
-  user-select: none;
+}
+
+.vnum-btn {
+  border: none;
+  background: transparent;
+  padding: 0 0.15em 0 0;
+  cursor: copy;
+}
+
+.vnum-btn:hover {
+  text-decoration: underline;
+}
+
+.vnum-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 .vtext {
